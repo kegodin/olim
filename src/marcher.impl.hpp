@@ -322,7 +322,7 @@ marcher<base, node, num_neighbors>::visit_neighbors_impl(abstract_node * n)
 
   // Get the parent index of a radial index `k'.
   auto const get_parent = [] (int k) {
-    if (num_neighbors == 4) {
+    if constexpr (num_neighbors == 4) {
       return (k + 2) % 4;
     } else {
       if (k < 4) return (k + 2) % 4;

@@ -17,7 +17,7 @@ void abstract_marcher::step() {
   visit_neighbors(n);
 }
 
-abstract_marcher::abstract_marcher(size_t initial_heap_size):
+abstract_marcher::abstract_marcher(int initial_heap_size):
   _heap {initial_heap_size}
 {}
 

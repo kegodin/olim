@@ -15,14 +15,14 @@
 template <class Node>
 struct heap
 {
-  heap(size_t capacity);
+  heap(int capacity);
   ~heap();
 
   Node *& front();
   Node * const & front() const;
   bool empty() const;
   Node ** data() const;
-  size_t size() const;
+  int size() const;
   void pop_front();
   void insert(Node * n);
   void swim(Node * n);
@@ -36,8 +36,8 @@ EIKONAL_PRIVATE:
   void swap(int pos1, int pos2);
 	
   Node ** _data {nullptr};
-  size_t _size {0};
-  size_t _capacity {0};
+  int _size {0};
+  int _capacity {0};
 };
 
 #define VALUE(pos) (_data[pos]->get_value())
@@ -46,7 +46,7 @@ EIKONAL_PRIVATE:
 #define PARENT(pos) (((pos) - 1)/2)
 
 template <class Node>
-heap<Node>::heap(size_t capacity):
+heap<Node>::heap(int capacity):
   _data {new Node *[capacity]},
   _capacity {capacity}
 {}
@@ -79,7 +79,7 @@ Node ** heap<Node>::data() const {
 }
 
 template <class Node>
-size_t heap<Node>::size() const {
+int heap<Node>::size() const {
   return _size;
 }
 
@@ -127,7 +127,7 @@ void heap<Node>::swim(int pos) {
 
 template <class Node>
 void heap<Node>::sink(int pos) {
-  int ch = LEFT(pos), next = ch + 1, n = static_cast<size_t>(size());
+  int ch = LEFT(pos), next = ch + 1, n = size();
   while (ch < n) {
     if (next < n && VALUE(ch) > VALUE(next)) {
       ch = next;

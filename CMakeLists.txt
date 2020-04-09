@@ -29,11 +29,17 @@ include (gtest.cmake)
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall -Wextra -Werror -std=c++1z")
-set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DOLIM_DEBUG")
-set (CMAKE_CXX_FLAGS_RELWITHDEBINFO
-  "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DOLIM_DEBUG -DRELWITHDEBINFO")
-set (CMAKE_CXX_VISIBILITY_PRESET hidden)
+set (CMAKE_CXX_STANDARD 17)
+
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
+elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra -fPIC -Wall -Werror")
+  set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DOLIM_DEBUG")
+  set (CMAKE_CXX_FLAGS_RELWITHDEBINFO
+      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DOLIM_DEBUG -DRELWITHDEBINFO")
+  set (CMAKE_CXX_VISIBILITY_PRESET hidden)
+endif()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
   string (REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELWITHDEBINFO
@@ -51,11 +57,45 @@ configure_file (src/config.hpp.in src/config.hpp)
 
 set (OLIM_SRC_FILES
   src/abstract_marcher.cpp
+  src/abstract_marcher.hpp
+  src/abstract_node.hpp
   src/basic_marcher.cpp
+  src/basic_marcher.hpp
   src/basic_marcher_3d.cpp
+  src/basic_marcher_3d.hpp
+  src/bitops.hpp
+  src/common.hpp
+  src/config.hpp.in
   src/cost_funcs.cpp
+  src/cost_funcs.hpp
+  src/heap.hpp
+  src/hybrid.hpp
+  src/hybrid.impl.hpp
+  src/marcher.hpp
+  src/marcher.impl.hpp
+  src/marcher_3d.hpp
+  src/marcher_3d.impl.hpp
+  src/node.hpp
+  src/node_3d.hpp
   src/numopt.cpp
-  src/speed_funcs.cpp)
+  src/numopt.hpp
+  src/numopt.impl.hpp
+  src/offsets.hpp
+  src/offsets.impl.hpp
+  src/olim.hpp
+  src/olim.impl.hpp
+  src/olim3d.hpp
+  src/olim3d.impl.hpp
+  src/speed_funcs.cpp
+  src/speed_funcs.hpp
+  src/typedefs.h
+  src/updates.common.hpp
+  src/updates.line.hpp
+  src/updates.tetra.hpp
+  src/updates.tetra.impl.hpp
+  src/updates.tri.hpp
+  src/updates.tri.impl.hpp
+  src/vecmath.hpp)
 
 add_library (olim STATIC ${OLIM_SRC_FILES})
 

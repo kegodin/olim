@@ -17,7 +17,7 @@
 #define COMPUTE_VALUE_3PT() ((T1 + T2 + T3 + sqrt(disc))/3)
 
 void basic_marcher_3d::update_impl(
-  node_3d * n, node_3d ** nb, int parent, double & T)
+  node_3d * n, node_3d ** nnb, int parent, double & T)
 {
   (void) parent;
 
@@ -26,36 +26,36 @@ void basic_marcher_3d::update_impl(
   double sh = get_h()*get_speed(i, j, k), sh_sq = sh*sh;
   double T1 = 0, T2 = 0, T3 = 0, disc = 0;
 
-  auto const value = [&] (int i) { return nb[i]->get_value(); };
+  auto const value = [&] (int i) { return nnb[i]->get_value(); };
 
   for (int l0 = 0, l1 = 1, l2 = 2; l0 < 6;
        ++l0, l1 = (l1 + 1) % 6, l2 = (l2 + 1) % 6) {
-    if (nb[l0]) {
+    if (nnb[l0]) {
       T1 = value(l0);
       T = fmin(T, T1 + sh);
-      if (nb[l1]) {
+      if (nnb[l1]) {
         T2 = value(l1);
         disc = COMPUTE_DISC_2PT();
         if (disc > 0) T = fmin(T, COMPUTE_VALUE_2PT());
       }
-      if (nb[l2]) {
+      if (nnb[l2]) {
         T2 = value(l2);
         disc = COMPUTE_DISC_2PT();
         if (disc > 0) T = fmin(T, COMPUTE_VALUE_2PT());
       }
-      if (nb[l1] && nb[l2]) {
+      if (nnb[l1] && nnb[l2]) {
         T2 = value(l1), T3 = value(l2);
         disc = COMPUTE_DISC_3PT();
         if (disc > 0) T = fmin(T, COMPUTE_VALUE_3PT());
       }
     }
   }
-  if (nb[0] && nb[2] && nb[4]) {
+  if (nnb[0] && nnb[2] && nnb[4]) {
     T1 = value(0), T2 = value(2), T3 = value(4);
     disc = COMPUTE_DISC_3PT();
     if (disc > 0) T = fmin(T, COMPUTE_VALUE_3PT());
   }
-  if (nb[1] && nb[3] && nb[5]) {
+  if (nnb[1] && nnb[3] && nnb[5]) {
     T1 = value(1), T2 = value(3), T3 = value(5);
     disc = COMPUTE_DISC_3PT();
     if (disc > 0) T = fmin(T, COMPUTE_VALUE_3PT());

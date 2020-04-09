@@ -27,10 +27,10 @@ struct node: public abstract_node {
   // TODO: these are candidates for a bit more optimization, probably
   // in the constructor of this class...
   inline int get_i_fac() const {
-    return _i - _fac_center->i;
+    return _i - static_cast<int>(_fac_center->i);
   }
   inline int get_j_fac() const {
-    return _j - _fac_center->j;
+    return _j - static_cast<int>(_fac_center->j);
   }
 
 EIKONAL_PRIVATE:

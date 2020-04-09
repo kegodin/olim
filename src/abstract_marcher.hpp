@@ -9,7 +9,7 @@ struct abstract_marcher {
   void step();
   virtual ~abstract_marcher() {}
 EIKONAL_PROTECTED:
-  abstract_marcher(size_t initial_heap_size = 256ul);
+  abstract_marcher(int initial_heap_size = 256);
   void visit_neighbors(abstract_node * n);
   abstract_node * get_next_node();
   void adjust_heap_entry(abstract_node * n);
