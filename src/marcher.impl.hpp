@@ -18,7 +18,7 @@ static inline size_t get_initial_heap_size(int width, int height) {
 template <class base, class node, int num_neighbors>
 marcher<base, node, num_neighbors>::marcher(
   int height, int width, double h, no_speed_func_t const &):
-  abstract_marcher {get_initial_heap_size(width, height)},
+  abstract_marcher {static_cast<int>(get_initial_heap_size(width, height))},
   _nodes {new node[width*height]},
   _s_cache {new double[width*height]},
   _h {h},
@@ -214,7 +214,10 @@ marcher<base, node, num_neighbors>::in_bounds(int i, int j) const
 
 template <class base, class node, int num_neighbors>
 bool marcher<base, node, num_neighbors>::in_bounds(double i, double j) const {
-  return 0 <= i <= _height - 1 && 0 <= j <= _width - 1;
+  return 0 <= static_cast<int>(i)
+           && static_cast<int>(i) <= _height - 1
+     &&  0 <= static_cast<int>(j)
+           && static_cast<int>(j) <= _width - 1;
 }
 
 template <class base, class node, int num_neighbors>

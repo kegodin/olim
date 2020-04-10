@@ -27,7 +27,7 @@ marcher_3d<base, node, num_neighbors>::marcher_3d() {}
 template <class base, class node, int num_neighbors>
 marcher_3d<base, node, num_neighbors>::marcher_3d(int height, int width, int depth, double h,
                                    no_speed_func_t const &):
-  abstract_marcher {get_initial_heap_size(width, height, depth)},
+  abstract_marcher {static_cast<int>(get_initial_heap_size(width, height, depth))},
   _nodes {new node[width*height*depth]},
   _s_cache {new double[width*height*depth]},
   _h {h},
@@ -43,7 +43,7 @@ marcher_3d<base, node, num_neighbors>::marcher_3d(
   int height, int width, int depth, double h,
   std::function<double(double, double, double)> s,
   double x0, double y0, double z0):
-  abstract_marcher {get_initial_heap_size(width, height, depth)},
+  abstract_marcher {static_cast<int>(get_initial_heap_size(width, height, depth))},
   _nodes {new node[width*height*depth]},
   _s_cache {new double[width*height*depth]},
   _h {h},
@@ -69,7 +69,7 @@ marcher_3d<base, node, num_neighbors>::marcher_3d(
 template <class base, class node, int num_neighbors>
 marcher_3d<base, node, num_neighbors>::marcher_3d(int height, int width, int depth, double h,
                                    double const * s_cache):
-  abstract_marcher {get_initial_heap_size(width, height, depth)},
+  abstract_marcher {static_cast<int>(get_initial_heap_size(width, height, depth))},
   _nodes {new node[width*height*depth]},
   _s_cache {new double[width*height*depth]},
   _h {h},
@@ -111,7 +111,7 @@ marcher_3d<base, node, num_neighbors>::add_boundary_node(
   double x, double y, double z, double s, double value)
 {
   double h = get_h(), i = y/h, j = x/h, k = z/h, u0 = value, s0 = s;
-  assert(in_bounds(i, j, k));
+  assert(in_bounds(static_cast<int>(i), static_cast<int>(j), static_cast<int>(k)));
 
   // TODO: make this more general: see comment in marcher.impl.hpp for
   // related function

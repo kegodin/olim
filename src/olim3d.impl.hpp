@@ -491,28 +491,28 @@ void olim3d_hu<F, node, lp_norm, d1, d2>::update_crtp(double & T)
     info.lambda[1] = 0;
     {
       double u0 = this->nb[l0]->get_value(), u1 = this->nb[l1]->get_value(),
-        u2 = this->nb[l2]->get_value(), s = this->s_hat, s0 = this->s[l0],
+        u2 = this->nb[l2]->get_value(), ss = this->s_hat, s0 = this->s[l0],
         s1 = this->s[l1], s2 = this->s[l2], h = this->get_h();
       if (n->is_factored()) {
         geom_fac_wkspc<2> g;
         g.init<3>(p0, p1, p2, p_fac);
         F_fac_wkspc<F, 2> w;
-        set_args<F>(w, g, u0, u1, u2, s, s0, s1, s2, h, s_fac);
+        set_args<F>(w, g, u0, u1, u2, ss, s0, s1, s2, h, s_fac);
         cost_functor_fac<F, 3, 2> func {w, g};
         updates::tetra<F, 3>()(func, info);
         if (F == MP0) {
-          eval_mp1_fix(func.w, s, s0, s1, s2, h, info.lambda, info.value);
+          eval_mp1_fix(func.w, ss, s0, s1, s2, h, info.lambda, info.value);
         }
       } else {
         F_wkspc<F, 2> w;
-        set_args<F>(w, u0, u1, u2, s, s0, s1, s2, h);
+        set_args<F>(w, u0, u1, u2, ss, s0, s1, s2, h);
         int lin = linear_index(l0, l1, l2);
         cost_functor<F, 3, 2> func {w, geom_wkspcs[lin]};
         func.qr = &qr_wkspcs[lin];
         updates::tetra<F, 3>()(func, info);
         if (F == MP0 && info.inbounds()) {
           func.set_lambda(info.lambda);
-          eval_mp1_fix(func.w, s, s0, s1, s2, h, info.lambda, info.value);
+          eval_mp1_fix(func.w, ss, s0, s1, s2, h, info.lambda, info.value);
         }
       }
     }

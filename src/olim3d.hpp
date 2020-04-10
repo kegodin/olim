@@ -209,16 +209,16 @@ EIKONAL_PRIVATE:
         this->nb[l0] && this->nb[l1] && this->nb[l2]) {
       updates::info<2> info;
       double u0 = this->nb[l0]->get_value(), u1 = this->nb[l1]->get_value(),
-        u2 = this->nb[l2]->get_value(), s = this->s_hat, s0 = this->s[l0],
+        u2 = this->nb[l2]->get_value(), ss = this->s_hat, s0 = this->s[l0],
         s1 = this->s[l1], s2 = this->s[l2], h = this->get_h();
       F_wkspc<F, 2> w;
-      set_args<F>(w, u0, u1, u2, s, s0, s1, s2, h);
+      set_args<F>(w, u0, u1, u2, ss, s0, s1, s2, h);
       cost_functor_bv<F, 3, p0, p1, p2> func {w};
       updates::tetra_bv<F, 3, p0, p1, p2>()(func, info);
       bool inbounds = info.inbounds();
       if (F == MP0 && inbounds) {
         func.set_lambda(info.lambda);
-        eval_mp1_fix(func.w, s, s0, s1, s2, h, info.lambda, info.value);
+        eval_mp1_fix(func.w, ss, s0, s1, s2, h, info.lambda, info.value);
       }
       u = std::min(u, info.value);
       if (F == MP1 || inbounds) {
@@ -270,15 +270,15 @@ EIKONAL_PRIVATE:
       geom_fac_wkspc<2> g;
       g.init<3>(p0, p1, p2, p_fac);
       double u0 = this->nb[l0]->get_value(), u1 = this->nb[l1]->get_value(),
-        u2 = this->nb[l2]->get_value(), s = this->s_hat, s0 = this->s[l0],
+        u2 = this->nb[l2]->get_value(), ss = this->s_hat, s0 = this->s[l0],
         s1 = this->s[l1], s2 = this->s[l2], h = this->get_h(), s_fac = fc->s;
       F_fac_wkspc<F, 2> w;
-      set_args<F>(w, g, u0, u1, u2, s, s0, s1, s2, h, s_fac);
+      set_args<F>(w, g, u0, u1, u2, ss, s0, s1, s2, h, s_fac);
       cost_functor_fac<F, 3, 2> func {w, g};
       updates::info<2> info;
       updates::tetra<F, 3>()(func, info);
       if (F == MP0) {
-        eval_mp1_fix(func.w, s, s0, s1, s2, h, info.lambda, info.value);
+        eval_mp1_fix(func.w, ss, s0, s1, s2, h, info.lambda, info.value);
       }
       u = std::min(u, info.value);
 #if COLLECT_STATS

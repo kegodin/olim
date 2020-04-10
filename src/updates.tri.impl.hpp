@@ -544,38 +544,38 @@ updates::tri<MP1, n>::operator()(
 
   if (iter == 10) {
     bool conv;
-    double lam[2], F1[2], dF1, d2F1, g, alpha;
-    lam[0] = info.lambda[0];
-    F1[0] = F1__(lam[0]);
+    double llam[2], F1[2], dF1, d2F1, gg, alpha;
+    llam[0] = info.lambda[0];
+    F1[0] = F1__(llam[0]);
     do {
       alpha = 1;
-      dp_dot_plam = dp_dot_p0 + lam[0]*dp_dot_dp;
-      dF1 = dF1__(lam[0]);
-      d2F1 = d2F1__(lam[0]);
-      g = -dF1/d2F1;
+      dp_dot_plam = dp_dot_p0 + llam[0]*dp_dot_dp;
+      dF1 = dF1__(llam[0]);
+      d2F1 = d2F1__(llam[0]);
+      gg = -dF1/d2F1;
 
-      double lam_ = lam[0] + alpha*g;
+      double lam_ = llam[0] + alpha*gg;
       double u_ = u__(lam_);
       double s_ = s__(lam_);
       double l_ = l__(lam_);
       double tmp = u_ + h*s_*l_;
-      while (tmp > F1[0] + c1*alpha*dF1*g) {
+      while (tmp > F1[0] + c1*alpha*dF1*gg) {
         alpha *= 0.9;
-        lam_ = lam[0] + alpha*g;
+        lam_ = llam[0] + alpha*gg;
         u_ = u__(lam_);
         s_ = s__(lam_);
         l_ = l__(lam_);
         tmp = u_ + h*s_*l_;
       }
-      lam[1] = std::max(0., std::min(1., lam[0] + alpha*g));
-      F1[1] = F1__(lam[1]);
-      conv = fabs(lam[1] - lam[0]) <= eps<double> ||
+      llam[1] = std::max(0., std::min(1., llam[0] + alpha*gg));
+      F1[1] = F1__(llam[1]);
+      conv = fabs(llam[1] - llam[0]) <= eps<double> ||
         fabs(F1[1] - F1[0]) <= eps<double>;
-      lam[0] = lam[1];
+      llam[0] = llam[1];
       F1[0] = F1[1];
     } while (!conv);
     info.value = F1[1];
-    info.lambda[0] = lam[1];
+    info.lambda[0] = llam[1];
   } else {
     info.value = F1__(lam);
     info.lambda[0] = lam;

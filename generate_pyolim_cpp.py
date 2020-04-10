@@ -71,7 +71,7 @@ marcher_template = Template('''
          ${cpp_class_name} & m,
          std::vector<${cpp_class_name}::node_type const *> const & nodes)
        {
-         m.add_boundary_nodes(nodes.data(), nodes.size());
+         m.add_boundary_nodes(nodes.data(), static_cast<int>(nodes.size()));
        })
      .def(
        "set_node_fac_center",
